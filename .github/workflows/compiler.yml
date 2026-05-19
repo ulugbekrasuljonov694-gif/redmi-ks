@@ -8,6 +8,7 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
       - name: Install Compiler Dependencies
         run: |
           sudo apt-get update
@@ -16,14 +17,12 @@ jobs:
             libncurses-dev libssl-dev libxml2 libxml2-utils lzop \
             pngcrush rsync schedtool squashfs-tools xsltproc zip \
             zlib1g-dev python3 python-is-python3 libtinfo-dev
-    
-      - name: Setup Clang 14 Toolchain
+
+      - name: Setup Clang Toolchain
         run: |
-          mkdir -p $GITHUB_WORKSPACE/clang14
-          cd $GITHUB_WORKSPACE/clang14
-          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
-          tar -xf clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz --strip-components=1
-      
+          mkdir -p $GITHUB_WORKSPACE/clang
+          cd $GITHUB_WORKSPACE/clang
+          bash <(curl -s "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman") -S
 
       - name: Download Official Xiaomi Source
         run: |
@@ -43,7 +42,7 @@ jobs:
       - name: Start Compilation Process
         run: |
           cd $GITHUB_WORKSPACE/source-code
-          export PATH=$GITHUB_WORKSPACE/clang14/bin:$PATH
+          export PATH=$GITHUB_WORKSPACE/clang/bin:$PATH
           export ARCH=arm64
           export SUBARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
