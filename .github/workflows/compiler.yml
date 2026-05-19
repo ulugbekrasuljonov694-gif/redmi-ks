@@ -12,7 +12,6 @@ jobs:
       - name: Install Compiler Dependencies
         run: |
           sudo apt-get update
-          # Eski paket muammosini avtomat hal qilish
           wget -q http://ftp.de.debian.org/debian/pool/main/n/ncurses/libtinfo5_6.1+20181013-2+deb10u5_amd64.deb || true
           if [ -f libtinfo5_6.1+20181013-2+deb10u5_amd64.deb ]; then
             sudo dpkg -i libtinfo5_6.1+20181013-2+deb10u5_amd64.deb || sudo apt-get install -f -y
@@ -34,7 +33,6 @@ jobs:
       - name: Download KernelSU Source
         run: |
           cd $GITHUB_WORKSPACE
-          # Agar papka yo'q bo'lsa, avtomat yuklab olish
           if [ ! -d "kernel" ]; then
             git clone --depth=1 https://github.com/tiann/KernelSU.git kernel
           fi
@@ -42,7 +40,6 @@ jobs:
       - name: Inject KernelSU Support
         run: |
           cd $GITHUB_WORKSPACE/source-code
-          # Qayta ulanish xatolarini oldini olish
           if ! grep -q "drivers/kernelsu/" drivers/Makefile; then
             echo "obj-y += drivers/kernelsu/" >> drivers/Makefile
           fi
@@ -57,7 +54,13 @@ jobs:
           export SUBARCH=arm64
           export CROSS_COMPILE=aarch64-linux-gnu-
           export CC=clang
-          make O=out camellian_defconfig
+          
+          # Konfiguratsiya fayli nomini avtomat aniqlash va ishga tushirish
+          cd arch/arm64/configs/
+          DEFCONFIG_FILE=$(ls *camellian*defconfig 2>/dev/null || ls *camellian* 2>/dev/null || echo "camellian_defconfig")
+          cd $GITHUB_WORKSPACE/source-code
+          
+          make O=out $DEFCONFIG_FILE
           make O=out -j$(nproc)
 
       - name: Output Boot Flashable Image
