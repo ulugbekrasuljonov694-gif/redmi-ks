@@ -17,13 +17,13 @@ jobs:
             pngcrush rsync schedtool squashfs-tools xsltproc zip \
             zlib1g-dev python3 python-is-python3 libtinfo-dev
     
-
       - name: Setup Clang 14 Toolchain
         run: |
           mkdir -p $GITHUB_WORKSPACE/clang14
           cd $GITHUB_WORKSPACE/clang14
-          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-          tar -xf clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --strip-components=1
+          wget https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz
+          tar -xf clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-22.04.tar.xz --strip-components=1
+      
 
       - name: Download Official Xiaomi Source
         run: |
