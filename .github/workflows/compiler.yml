@@ -27,7 +27,7 @@ jobs:
       - name: Download Official Xiaomi Source
         run: |
           cd $GITHUB_WORKSPACE
-          git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b camellian-r-oss source-code
+          git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b camellian-s-oss source-code
 
       - name: Download KernelSU Source
         run: |
