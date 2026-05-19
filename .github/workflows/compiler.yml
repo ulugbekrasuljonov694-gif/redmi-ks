@@ -22,9 +22,28 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/clang14
           cd $GITHUB_WORKSPACE/clang14
-          # Barqaror va ishlaydigan muqobil Clang 14 havolasi
-          wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r450784d.tar.gz || wget -q https://github.com/ZyCromerZ/Clang/releases/download/14.0.6-20220723/Clang-14.0.6-20220723.tar.gz
-          tar -xf *.tar.gz 2>/dev/null || tar -xf *.tar.xz --strip-components=1 2>/dev/null || true
+          
+          # Ikkala manbadan ham xavfsiz yuklab olish va tekshirish
+          if wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r450784d.tar.gz; then
+            tar -xf clang-r450784d.tar.gz
+            echo "Downloaded from Android source"
+          elif wget -q https://github.com/ZyCromerZ/Clang/releases/download/14.0.6-20220723/Clang-14.0.6-20220723.tar.gz; then
+            tar -xf Clang-14.0.6-20220723.tar.gz --strip-components=1
+            echo "Downloaded from ZyCromerZ releases"
+          else
+            echo "ERROR: Failed to download Clang 14 toolchain from all sources"
+            exit 1
+          fi
+          
+          # Fayl qayerda ochilgan bo'lsa ham bin/clang borligini aniq qidirib topish
+          if [ ! -f "bin/clang" ] && [ -f "clang-r450784d/bin/clang" ]; then
+            mv clang-r450784d/* .
+          fi
+          
+          if [ ! -f "bin/clang" ]; then
+            echo "ERROR: Clang binary not found after extraction"
+            exit 1
+          fi
 
       - name: Download Official Xiaomi Source
         run: |
