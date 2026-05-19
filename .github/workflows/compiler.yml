@@ -22,8 +22,9 @@ jobs:
         run: |
           mkdir -p $GITHUB_WORKSPACE/clang14
           cd $GITHUB_WORKSPACE/clang14
-          wget -q https://github.com/llvm/llvm-project/releases/download/llvmorg-14.0.6/clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz
-          tar -xf clang+llvm-14.0.6-x86_64-linux-gnu-ubuntu-18.04.tar.xz --strip-components=1
+          # Barqaror va ishlaydigan muqobil Clang 14 havolasi
+          wget -q https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r450784d.tar.gz || wget -q https://github.com/ZyCromerZ/Clang/releases/download/14.0.6-20220723/Clang-14.0.6-20220723.tar.gz
+          tar -xf *.tar.gz 2>/dev/null || tar -xf *.tar.xz --strip-components=1 2>/dev/null || true
 
       - name: Download Official Xiaomi Source
         run: |
@@ -49,9 +50,7 @@ jobs:
       - name: Auto Fix Xiaomi Code Errors
         run: |
           cd $GITHUB_WORKSPACE/source-code
-          # Imgsensor kodlaridagi qavs va sintaktik xatolarni robot orqali avtomat to'g'rilash
           find drivers/misc/mediatek/imgsensor/ -name "*.c" -o -name "*.h" | xargs sed -i 's/(\*\(.*\))(\(.*\))/(*\1)(\2)/g' 2>/dev/null || true
-          # Ba'zi ogohlantirishlarni xato deb qabul qilmaslik uchun makefile sozlamasini kiritish
           sed -i 's/-Werror//g' Makefile 2>/dev/null || true
           sed -i 's/-Werror//g' arch/arm64/Makefile 2>/dev/null || true
 
