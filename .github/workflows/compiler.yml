@@ -28,11 +28,16 @@ jobs:
           cd $GITHUB_WORKSPACE
           git clone --depth=1 https://github.com/MiCode/Xiaomi_Kernel_OpenSource.git -b camellian-r-oss source-code
 
+      - name: Download KernelSU Source
+        run: |
+          cd $GITHUB_WORKSPACE
+          git clone --depth=1 https://github.com/tiann/KernelSU.git kernel
+
       - name: Inject KernelSU Support
         run: |
           cd $GITHUB_WORKSPACE/source-code
           echo "obj-y += drivers/kernelsu/" >> drivers/Makefile
-          ln -sf $GITHUB_WORKSPACE/kernel drivers/kernelsu
+          ln -sf $GITHUB_WORKSPACE/kernel/kernel drivers/kernelsu
           
       - name: Start Compilation Process
         run: |
