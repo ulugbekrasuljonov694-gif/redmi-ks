@@ -12,7 +12,6 @@ jobs:
       - name: Install Compiler Dependencies
         run: |
           sudo apt-get update
-          # Ubuntu 24.04 serveri uchun libtinfo5 paketini barqaror arxivdan majburiy o'rnatish
           wget http://ftp.de.debian.org/debian/pool/main/n/ncurses/libtinfo5_6.1+20181013-2+deb10u5_amd64.deb
           sudo dpkg -i libtinfo5_6.1+20181013-2+deb10u5_amd64.deb || sudo apt-get install -f -y
           sudo apt-get install -y bc bison build-essential ccache flex g++-multilib gcc-multilib git gnupg gperf libreadline-dev lib32z1-dev libelf-dev liblz4-tool libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev
